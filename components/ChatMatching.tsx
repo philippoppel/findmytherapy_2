@@ -115,7 +115,10 @@ export const ChatMatching = ({ topMatches, visibleCount }: ChatMatchingProps) =>
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
-    const nextMessages = [...messages, { id: createId(), role: "user", content: trimmed }];
+    const nextMessages: ChatMessage[] = [
+      ...messages,
+      { id: createId(), role: "user", content: trimmed }
+    ];
     setMessages(nextMessages);
     setInput("");
     setIsSending(true);
