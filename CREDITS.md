@@ -1,0 +1,26 @@
+Open source image credits
+
+- public/people/person-01.jpg: Unsplash https://unsplash.com/photos/woman-in-red-cardigan-smiling-mpDV4xaFP8c by @ibidsy
+- public/people/person-02.jpg: Unsplash https://unsplash.com/photos/woman-on-focus-photography-SJvDxw0azqw by @wocintechchat
+- public/people/person-03.jpg: Unsplash https://unsplash.com/photos/man-in-black-zip-up-jacket-p5BoBF0XJUA by @willsouzabr
+- public/people/person-04.jpg: Unsplash https://unsplash.com/photos/man-in-black-crew-neck-long-sleeve-shirt-Ft4p5E9HjTQ by @ryanhoffman007
+- public/people/person-05.jpg: Unsplash https://unsplash.com/photos/man-wearing-white-v-neck-shirt-iFgRcqHznqg by @miracletwentyone
+- public/people/person-06.jpg: Unsplash https://unsplash.com/photos/closeup-photography-of-woman-smiling-mEZ3PoFGs_k by @michaeldam
+- public/people/person-07.jpg: Unsplash https://unsplash.com/photos/man-wearing-henley-top-portrait-7YVZYZeITc8 by @juricakoletic
+- public/people/person-08.jpg: Unsplash https://unsplash.com/photos/man-wearing-eyeglasses-and-blue-shirt-inside-coffee-shop-QJEVpydulGs by @darshanp9
+- public/people/person-09.jpg: Unsplash https://unsplash.com/photos/mans-grey-and-black-shirt-ILip77SbmOE by @albertdera
+- public/people/person-10.jpg: Unsplash https://unsplash.com/photos/shallow-focus-photo-of-woman-in-gray-jacket-0Zx1bDv5BNY by @wocintechchat
+- public/people/person-11.jpg: Unsplash https://unsplash.com/photos/a-man-in-a-blue-shirt-smiling-at-the-camera-zNxOw2JFNKs by @dannypostma
+- public/people/person-12.jpg: Unsplash https://unsplash.com/photos/woman-staring-directly-at-camera-near-pink-wall-bqe0J0b26RQ by @jimmyferminphotography
+- public/people/person-13.jpg: Unsplash https://unsplash.com/photos/a-man-in-a-blue-shirt-smiling-at-the-camera-oz2wj86hGxA by @gregsedwards
+- public/people/person-14.jpg: Unsplash https://unsplash.com/photos/man-in-gray-crew-neck-shirt-f5xiGmFwXIU by @fresh_studio
+- public/people/person-15.jpg: Unsplash https://unsplash.com/photos/woman-in-white-crew-neck-shirt-smiling-IF9TK5Uy-KI by @jakenackos
+- public/people/person-16.jpg: Unsplash https://unsplash.com/photos/man-in-black-crew-neck-shirt-hr_feH2URs0 by @nartan
+- public/people/person-17.jpg: Unsplash https://unsplash.com/photos/man-in-blue-button-up-shirt-C2Nf5iPOnz0 by @andreonbrand
+- public/people/person-18.jpg: Unsplash https://unsplash.com/photos/woman-in-black-leather-jacket-4BG2yKyCaWg by @fresh_studio
+- public/people/person-19.jpg: Unsplash https://unsplash.com/photos/man-in-black-nike-hoodie-and-blue-fitted-cap-Y7TEMCKRIgI by @kxrabo
+- public/people/person-20.jpg: Unsplash https://unsplash.com/photos/woman-in-black-long-sleeve-shirt-M7fbJyBuAag by @megwagener
+- public/illustrations/compass.svg: Custom SVG illustration created for this demo.
+- public/illustrations/conversation.svg: Custom SVG illustration created for this demo.
+- public/illustrations/insight.svg: Custom SVG illustration created for this demo.
+- public/illustrations/journey.svg: Custom SVG illustration created for this demo.
