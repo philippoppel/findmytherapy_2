@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { MobileNav } from "./MobileNav";
 
 export const SiteHeader = () => {
   const [showCrisis, setShowCrisis] = useState(true);
@@ -38,7 +39,8 @@ export const SiteHeader = () => {
           <span className="text-orange">Therapy</span>
         </span>
       </Link>
-      <nav className="flex items-center gap-4 text-sm">
+      {/* Desktop Navigation - versteckt auf Mobile */}
+      <nav className="hidden md:flex items-center gap-4 text-sm">
         <Link href="/patient" className="hover:text-orange transition">
           Hilfe finden
         </Link>
@@ -46,12 +48,12 @@ export const SiteHeader = () => {
           Meine Therapeut:innen
         </Link>
         <Link href="/compare" className="hover:text-orange transition">
-          Therapeut:innen vergleichen
-        </Link>
-        <Link href="/patient" className="hover:text-orange transition">
-          So funktioniert's
+          Vergleichen
         </Link>
       </nav>
+
+      {/* Mobile Navigation - Hamburger-Menü */}
+      <MobileNav />
     </div>
   </header>
     </>

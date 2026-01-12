@@ -139,7 +139,7 @@ export default function PatientPage() {
   const router = useRouter();
   const { answers, setAnswers, resetAnswers, therapists, hasHydrated } = useAppStore();
   const [step, setStep] = useState(0);
-  const [quickProfileId, setQuickProfileId] = useState<string | null>(null);
+  const [selectedQuickProfiles, setSelectedQuickProfiles] = useState<string[]>([]);
   const [showAllConcerns, setShowAllConcerns] = useState(false);
   const [showPreviewDetails, setShowPreviewDetails] = useState(false);
   const [showQuickExtras, setShowQuickExtras] = useState(false);
@@ -177,26 +177,51 @@ export default function PatientPage() {
     return <div className="card p-6">Lade gespeicherte Eingaben...</div>;
   }
 
-  const applyQuickProfile = (profileId: string) => {
-    const profile = quickProfiles.find((item) => item.id === profileId);
-    if (!profile) return;
-    const next = {
-      ...defaultAnswers,
-      ...profile.answers,
-      displayName: answers.displayName,
-      primaryGoal: answers.primaryGoal || profile.answers.primaryGoal || "",
-      matchPriority: profile.answers.matchPriority ?? answers.matchPriority,
-      preferences: {
-        ...defaultAnswers.preferences,
-        ...profile.answers.preferences
-      },
-      availability: {
-        ...defaultAnswers.availability,
-        ...profile.answers.availability
+  const toggleQuickProfile = (profileId: string) => {
+    const isSelected = selectedQuickProfiles.includes(profileId);
+
+    if (isSelected) {
+      // Entfernen
+      setSelectedQuickProfiles((prev) => prev.filter((id) => id !== profileId));
+    } else {
+      // Hinzufügen
+      setSelectedQuickProfiles((prev) => [...prev, profileId]);
+    }
+
+    // Kombiniere alle ausgewählten Profile
+    const newSelected = isSelected
+      ? selectedQuickProfiles.filter((id) => id !== profileId)
+      : [...selectedQuickProfiles, profileId];
+
+    if (newSelected.length === 0) {
+      // Wenn keine Profile ausgewählt, zurücksetzen zu Defaults
+      setAnswers((prev) => ({
+        ...defaultAnswers,
+        displayName: prev.displayName,
+        primaryGoal: prev.primaryGoal
+      }));
+      return;
+    }
+
+    // Kombiniere Concerns aller ausgewählten Profile
+    const combinedConcerns = new Set<string>();
+    const combinedGoals: string[] = [];
+
+    newSelected.forEach((id) => {
+      const profile = quickProfiles.find((item) => item.id === id);
+      if (profile) {
+        profile.answers.concerns?.forEach((concern: string) => combinedConcerns.add(concern));
+        if (profile.answers.primaryGoal) {
+          combinedGoals.push(profile.answers.primaryGoal);
+        }
       }
-    };
-    setAnswers(() => next);
-    setQuickProfileId(profileId);
+    });
+
+    setAnswers((prev) => ({
+      ...prev,
+      concerns: Array.from(combinedConcerns),
+      primaryGoal: prev.primaryGoal || combinedGoals[0] || ""
+    }));
   };
 
   const applyGentleStart = () => {
@@ -211,7 +236,7 @@ export default function PatientPage() {
       matchingMode: "explore",
       dealbreakers: []
     }));
-    setQuickProfileId(null);
+    setSelectedQuickProfiles([]);
   };
 
   const stepConfig = steps[step];
@@ -248,7 +273,7 @@ export default function PatientPage() {
           <button
             onClick={() => {
               resetAnswers();
-              setQuickProfileId(null);
+              setSelectedQuickProfiles([]);
               setStep(0);
             }}
             className="rounded-full border border-ink/20 bg-white px-4 py-2 text-xs font-semibold"
@@ -371,8 +396,8 @@ export default function PatientPage() {
                         primaryGoal: event.target.value
                       }))
                     }
-                    rows={3}
-                    className="mt-2 w-full rounded-2xl border border-ink/20 bg-white px-3 py-2 text-sm"
+                    rows={4}
+                    className="mt-2 w-full rounded-2xl border border-ink/20 bg-white px-4 py-3 text-sm"
                     placeholder="z.B. Ich schlafe schlecht und fühle mich oft überfordert..."
                   />
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -576,27 +601,43 @@ export default function PatientPage() {
               </div>
 
               <div className="rounded-2xl bg-white/70 p-4 space-y-4">
-                <p className="text-sm font-semibold">Oder wähle einen Schnellstart</p>
-                <p className="text-xs text-ink/60">Wenn du nicht lange nachdenken möchtest - ein Klick genügt.</p>
+                <p className="text-sm font-semibold">Oder wähle Schnellstart-Themen</p>
+                <p className="text-xs text-ink/60">Mehrere auswählen möglich - so bekommst du Empfehlungen für alle Themen.</p>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {quickProfiles.map((profile) => (
-                    <button
-                      key={profile.id}
-                      onClick={() => applyQuickProfile(profile.id)}
-                      className={`rounded-2xl border p-4 text-left transition ${
-                        quickProfileId === profile.id
-                          ? "border-orange bg-lavender/30"
-                          : "border-ink/10 bg-white"
-                      }`}
-                    >
-                      <p className="text-sm font-semibold">{profile.title}</p>
-                      <p className="mt-2 text-xs text-ink/70">{profile.description}</p>
-                      <span className="mt-3 inline-flex rounded-full border border-ink/20 px-3 py-1 text-xs">
-                        {quickProfileId === profile.id ? "Ausgewählt" : "Auswählen"}
-                      </span>
-                    </button>
-                  ))}
+                  {quickProfiles.map((profile) => {
+                    const isSelected = selectedQuickProfiles.includes(profile.id);
+                    return (
+                      <button
+                        key={profile.id}
+                        onClick={() => toggleQuickProfile(profile.id)}
+                        className={`rounded-2xl border p-4 text-left transition ${
+                          isSelected
+                            ? "border-orange bg-lavender/30"
+                            : "border-ink/10 bg-white hover:border-ink/20"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold">{profile.title}</p>
+                            <p className="mt-2 text-xs text-ink/70">{profile.description}</p>
+                          </div>
+                          {isSelected && (
+                            <span className="flex-shrink-0 w-5 h-5 bg-orange text-white rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
+                {selectedQuickProfiles.length > 0 && (
+                  <p className="text-xs text-ink/60">
+                    {selectedQuickProfiles.length} Thema{selectedQuickProfiles.length > 1 ? "n" : ""} ausgewählt
+                  </p>
+                )}
                 <div className="rounded-2xl bg-lavender/20 px-3 py-2 text-xs text-ink/70">
                   Nicht sicher, was du brauchst? Kein Problem - starte einfach und schau, wer zu dir passen könnte.
                 </div>

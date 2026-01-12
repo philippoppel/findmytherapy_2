@@ -11,6 +11,12 @@ export type ExcludedEntry = {
   reason: string;
 };
 
+export type ToastMessage = {
+  id: string;
+  message: string;
+  type: "success" | "info" | "warning";
+};
+
 type AppState = {
   hasHydrated: boolean;
   answers: PatientAnswers;
@@ -19,6 +25,7 @@ type AppState = {
   maybe: string[];
   excluded: Record<string, ExcludedEntry>;
   compareList: string[];
+  toast: ToastMessage | null;
   setHasHydrated: (value: boolean) => void;
   setAnswers: (updater: (prev: PatientAnswers) => PatientAnswers) => void;
   setTherapists: (therapists: Therapist[]) => void;
@@ -32,6 +39,8 @@ type AppState = {
   upsertTherapist: (therapist: Therapist) => void;
   deleteTherapist: (id: string) => void;
   resetTherapists: () => void;
+  showToast: (message: string, type?: "success" | "info" | "warning") => void;
+  hideToast: () => void;
 };
 
 const resolvePhoto = (therapist: Therapist) => {
@@ -74,26 +83,35 @@ export const useAppStore = create<AppState>()(
       maybe: [],
       excluded: {},
       compareList: [],
+      toast: null,
       setHasHydrated: (value) => set({ hasHydrated: value }),
       setAnswers: (updater) => set((state) => ({ answers: updater(state.answers) })),
       resetAnswers: () => set({ answers: defaultAnswers }),
       toggleShortlist: (id) =>
         set((state) => {
           const exists = state.shortlist.includes(id);
-          return {
+          const newState = {
             shortlist: exists
               ? state.shortlist.filter((item) => item !== id)
               : [...state.shortlist, id],
-            maybe: state.maybe.filter((item) => item !== id)
+            maybe: state.maybe.filter((item) => item !== id),
+            toast: exists
+              ? null
+              : { id: Date.now().toString(), message: "Zur Merkliste hinzugefügt!", type: "success" as const }
           };
+          return newState;
         }),
       toggleMaybe: (id) =>
         set((state) => {
           const exists = state.maybe.includes(id);
-          return {
+          const newState = {
             maybe: exists ? state.maybe.filter((item) => item !== id) : [...state.maybe, id],
-            shortlist: state.shortlist.filter((item) => item !== id)
+            shortlist: state.shortlist.filter((item) => item !== id),
+            toast: exists
+              ? null
+              : { id: Date.now().toString(), message: "Als Vielleicht gemerkt", type: "info" as const }
           };
+          return newState;
         }),
       excludeCandidate: (id, reason) =>
         set((state) => ({
@@ -134,7 +152,10 @@ export const useAppStore = create<AppState>()(
         }),
       deleteTherapist: (id) =>
         set((state) => ({ therapists: state.therapists.filter((item) => item.id !== id) })),
-      resetTherapists: () => set({ therapists: initialTherapists })
+      resetTherapists: () => set({ therapists: initialTherapists }),
+      showToast: (message, type = "success") =>
+        set({ toast: { id: Date.now().toString(), message, type } }),
+      hideToast: () => set({ toast: null })
     }),
     {
       name: "psy-matching-store",

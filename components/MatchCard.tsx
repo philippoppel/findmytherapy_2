@@ -11,6 +11,7 @@ import {
   formatSetting,
   normalizePhotoSrc
 } from "../lib/utils";
+import { GlossaryTerm } from "./GlossaryTerm";
 
 type MatchCardProps = {
   result: MatchResult;
@@ -32,12 +33,14 @@ const handleImageError = (event: SyntheticEvent<HTMLImageElement>) => {
   target.src = "/therapist-placeholder.svg";
 };
 
-const scoreLabel = (score: number) => {
-  if (score >= 85) return "Sehr gut";
-  if (score >= 70) return "Gut";
-  if (score >= 55) return "Solide";
-  if (score >= 40) return "Ok";
-  return "Niedrig";
+const scoreLabel = (score: number, rank: number) => {
+  // Relative Labels basierend auf Rang - vermeidet verwirrende "Niedrig"-Labels bei Top-Matches
+  if (rank === 1) return "Beste Passung";
+  if (rank <= 3) return "Top-Empfehlung";
+  if (score >= 70) return "Gute Passung";
+  if (score >= 55) return "Passend";
+  if (score >= 40) return "Mögliche Passung";
+  return "Weniger passend";
 };
 
 export const MatchCard = ({
@@ -72,13 +75,13 @@ export const MatchCard = ({
                 <p className="text-xs uppercase tracking-wide text-ink/50">#{rank} Empfehlung</p>
                 <h3 className="text-xl font-semibold">{therapist.name}</h3>
                 <p className="text-sm text-ink/70">
-                  {therapist.verfahren} · {therapist.bezirk}
+                  <GlossaryTerm term={therapist.verfahren}>{therapist.verfahren}</GlossaryTerm> · <GlossaryTerm term={therapist.bezirk}>{therapist.bezirk}</GlossaryTerm>
                 </p>
               </div>
               <div className="text-right space-y-2">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-ink/50">Passung</p>
-                  <p className="text-lg font-semibold text-ink">{scoreLabel(explanation.score)}</p>
+                  <p className="text-lg font-semibold text-ink">{scoreLabel(explanation.score, rank)}</p>
                 </div>
                 <label
                   className={`inline-flex items-center gap-2 text-xs text-ink/60 ${

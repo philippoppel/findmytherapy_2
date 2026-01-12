@@ -25,6 +25,25 @@ const config: Config = {
       boxShadow: {
         soft: "0 10px 30px rgba(17, 24, 39, 0.08)",
         lift: "0 18px 45px rgba(15, 23, 42, 0.12)"
+      },
+      animation: {
+        "fade-up": "fadeUp 0.3s ease-out",
+        "fade-in": "fadeIn 0.2s ease-out",
+        "slide-in": "slideIn 0.3s ease-out"
+      },
+      keyframes: {
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateX(-50%) translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateX(-50%) translateY(0)" }
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        },
+        slideIn: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" }
+        }
       }
     }
   },

@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { ContactModal } from "../../components/ContactModal";
 import { MatchCard } from "../../components/MatchCard";
+import { Toast } from "../../components/Toast";
 import { computeAnalytics } from "../../lib/analytics";
 import { priorityOptions } from "../../lib/data/options";
 import { runMatching, sortMatches } from "../../lib/matching";
@@ -22,12 +24,16 @@ export default function ResultsPage() {
     toggleCompare,
     compareList,
     setCompareList,
-    hasHydrated
+    hasHydrated,
+    toast,
+    hideToast
   } = useAppStore();
   const [sortBy, setSortBy] = useState<"score" | "next" | "distance">(answers.matchPriority);
   const [onlyKasse, setOnlyKasse] = useState(false);
   const [onlyOnline, setOnlyOnline] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [selectedTherapistName, setSelectedTherapistName] = useState("");
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -147,12 +153,23 @@ export default function ResultsPage() {
       .slice(0, 2)
       .map(([tradeoff, count]) => ({ tradeoff, count }));
   }, [filtered]);
-  const topMatchLabel = (score: number) => {
-    if (score >= 85) return "Sehr gut";
-    if (score >= 70) return "Gut";
-    if (score >= 55) return "Solide";
-    if (score >= 40) return "Ok";
-    return "Niedrig";
+  const topMatchLabel = () => {
+    // Für den besten Match immer positives Label verwenden
+    return "Beste Passung";
+  };
+
+  const handleShortlistWithModal = (id: string) => {
+    const isAlreadyShortlisted = shortlist.includes(id);
+    toggleShortlist(id);
+
+    // Nur Modal öffnen wenn neu hinzugefügt wird
+    if (!isAlreadyShortlisted) {
+      const match = matches.find((m) => m.therapist.id === id);
+      if (match) {
+        setSelectedTherapistName(match.therapist.name);
+        setContactModalOpen(true);
+      }
+    }
   };
 
   if (!hasHydrated) {
@@ -214,7 +231,7 @@ export default function ResultsPage() {
               <div className="mt-2 space-y-1 text-sm text-ink/80">
                 <p className="font-semibold">{sorted[0].therapist.name}</p>
                 <p>
-                  Passung {topMatchLabel(sorted[0].explanation.score)} · Termin ca. {sorted[0].therapist.nextAvailableDays} Tage
+                  Passung {topMatchLabel()} · Termin ca. {sorted[0].therapist.nextAvailableDays} Tage
                 </p>
               </div>
             ) : (
@@ -324,7 +341,7 @@ export default function ResultsPage() {
                     rank={index + 1}
                     isShortlisted={shortlist.includes(match.therapist.id)}
                     isMaybe={maybe.includes(match.therapist.id)}
-                    onShortlist={toggleShortlist}
+                    onShortlist={handleShortlistWithModal}
                     onMaybe={toggleMaybe}
                     onExclude={excludeCandidate}
                     onToggleCompare={toggleCompare}
@@ -357,7 +374,7 @@ export default function ResultsPage() {
                     rank={index + topMatches.length + 1}
                     isShortlisted={shortlist.includes(match.therapist.id)}
                     isMaybe={maybe.includes(match.therapist.id)}
-                    onShortlist={toggleShortlist}
+                    onShortlist={handleShortlistWithModal}
                     onMaybe={toggleMaybe}
                     onExclude={excludeCandidate}
                     onToggleCompare={toggleCompare}
@@ -556,6 +573,23 @@ export default function ResultsPage() {
           </div>
         </div>
       </section>
+
+      {/* Toast Notifications */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
+      )}
+
+      {/* Contact Modal */}
+      <ContactModal
+        isOpen={contactModalOpen}
+        onClose={() => setContactModalOpen(false)}
+        therapistName={selectedTherapistName}
+        contactTemplate={contactTemplate}
+      />
     </div>
   );
 }
