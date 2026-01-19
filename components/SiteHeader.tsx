@@ -35,8 +35,8 @@ export const SiteHeader = () => {
       <Link href="/" className="flex items-center gap-2">
         <img src="/logo-icon.svg" alt="" className="h-10 w-auto" />
         <span className="text-2xl font-bold tracking-tight">
-          <span className="text-ink">FindMy</span>
-          <span style={{ color: "#8579b7" }}>Therapy</span>
+          <span className="text-ink font-bold">findmy</span>
+          <span className="font-medium" style={{ color: "#8579b7" }}>therapy</span>
         </span>
       </Link>
       {/* Desktop Navigation - versteckt auf Mobile */}
