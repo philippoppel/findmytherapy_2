@@ -34,7 +34,7 @@ export const SiteHeader = () => {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <Link href="/" className="flex items-center gap-2">
         <img src="/logo-icon.svg" alt="" className="h-10 w-auto" />
-        <span className="text-2xl font-bold tracking-tight">
+        <span className="text-xl tracking-tight">
           <span className="text-ink font-bold">findmy</span>
           <span className="font-medium" style={{ color: "#8579b7" }}>therapy</span>
         </span>

@@ -36,7 +36,7 @@ export const MobileNav = () => {
       `}>
         <div className="p-6">
           <div className="flex items-center justify-between mb-8">
-            <span className="text-lg font-bold">
+            <span className="text-xl tracking-tight">
               <span className="text-ink font-bold">findmy</span>
               <span className="font-medium" style={{ color: "#8579b7" }}>therapy</span>
             </span>
