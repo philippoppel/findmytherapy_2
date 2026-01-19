@@ -38,7 +38,7 @@ export const MobileNav = () => {
           <div className="flex items-center justify-between mb-8">
             <span className="text-lg font-bold">
               <span className="text-ink">FindMy</span>
-              <span className="text-orange">Therapy</span>
+              <span style={{ color: "#8579b7" }}>Therapy</span>
             </span>
             <button
               className="p-2 -mr-2 rounded-lg hover:bg-ink/5 transition"

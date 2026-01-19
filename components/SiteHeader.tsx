@@ -33,10 +33,10 @@ export const SiteHeader = () => {
       <header className="sticky top-0 z-20 backdrop-blur-md bg-white/70 border-b border-ink/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <Link href="/" className="flex items-center gap-2">
-        <img src="/logo-icon.jpeg" alt="" className="h-10 w-auto" />
+        <img src="/logo-icon.svg" alt="" className="h-10 w-auto" />
         <span className="text-2xl font-bold tracking-tight">
           <span className="text-ink">FindMy</span>
-          <span className="text-orange">Therapy</span>
+          <span style={{ color: "#8579b7" }}>Therapy</span>
         </span>
       </Link>
       {/* Desktop Navigation - versteckt auf Mobile */}
